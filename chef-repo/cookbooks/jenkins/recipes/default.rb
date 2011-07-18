@@ -37,6 +37,13 @@ service "jenkins" do
 end
 
 
+directory "/var/lib/jenkins/plugins" do
+  owner "jenkins"
+  group "nogroup"
+  mode "0755"
+  action :create
+end
+
 cookbook_file "/var/lib/jenkins/plugins/rundeck.hpi" do
   source "var/lib/jenkins/plugins/rundeck-#{rundeckPluginVersion}.hpi"
   mode 0644
