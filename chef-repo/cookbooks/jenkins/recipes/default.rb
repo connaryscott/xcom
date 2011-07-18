@@ -13,10 +13,10 @@
 # I'd rather build up a Chef cookbook than strip it down, so here's
 # a good starting point.
 
-rundeckPluginVersion="#{node[:jenkins][:plugins][:rundeck][:version]}"
-rundeckUser="#{node[:jenkins][:plugins][:rundeck][:user]}"
-rundeckPassword="#{node[:jenkins][:plugins][:rundeck][:password]}"
-rundeckUrl="#{node[:jenkins][:plugins][:rundeck][:url]}"
+rundeckPluginVersion = node[:jenkins][:plugins][:rundeck][:version]
+rundeckUser = node[:jenkins][:plugins][:rundeck][:user]
+rundeckPassword = node[:jenkins][:plugins][:rundeck][:password]
+rundeckUrl = node[:jenkins][:plugins][:rundeck][:url]
 
 
 include_recipe "apt"
