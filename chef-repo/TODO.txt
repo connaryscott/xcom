@@ -8,3 +8,27 @@ which are not aggregated into a role yet...
 we shall set that up next
 
 
+#
+# recipe and roles via knife
+#
+Node Roles
+% knife node show i-12345678 -r
+~/exampleorg/.chef/../cookbooks
+{
+  "run_list": [
+    "role[couchdb]"
+  ]
+}
+This node only has the role couchdb; if we wanted to add monitoring to that role we could add it:
+
+% knife node run_list add i-12345678 "role[monitoring]"
+~/exampleorg/.chef/../cookbooks
+{
+  "run_list": [
+    "role[couchdb]",
+    "role[monitoring]"
+  ]
+}
+
+
+
