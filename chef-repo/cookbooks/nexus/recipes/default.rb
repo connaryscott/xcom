@@ -10,23 +10,30 @@
 packageUrl = node[:nexus][:package][:url]
 packageFilename = node[:nexus][:package][:filename]
 packageChecksum = node[:nexus][:package][:checksum]
+
+homeDir =  node[:nexus][:home]
 installRoot =  node[:nexus][:installRoot]
 workDir =  node[:nexus][:work]
+
 rundeckPluginVersion = node[:nexus][:plugins][:rundeck][:version]
 
+nexusUser = node[:nexus][:user]
+nexusGroup = node[:nexus][:group]
+
 install "nexus" do
+  home homeDir
   installRoot installRoot 
   pkgRepoUrl packageUrl
   pkgFilename packageFilename
   pkgChecksum packageChecksum
-  user "root"
-  group "root"
+  user nexusUser
+  group nexusGroup
 end
 
 
 directory "#{workDir}/nexus/plugin-repository" do
-  owner "root"
-  group "root"
+  owner nexusUser
+  group nexusGroup
   mode "0755"
   action :create
 end
@@ -34,8 +41,8 @@ end
 cookbook_file "#{workDir}/nexus/plugin-repository/nexus-rundeck-plugin-#{rundeckPluginVersion}-bundle.zip" do 
   source "sonatype-work/nexus/plugin-repository/nexus-rundeck-plugin-#{rundeckPluginVersion}-bundle.zip"
   mode 0644
-  owner "root"
-  group "root"
+  owner nexusUser
+  group nexusGroup
   not_if do 
      File.exists?("#{workDir}/nexus/plugin-repository/nexus-rundeck-plugin-#{rundeckPluginVersion}")
   end
@@ -47,8 +54,8 @@ end
 #
 script "installRundeckPlugin" do
       interpreter "bash"
-      user "root"
-      group "root"
+      user nexusUser
+      group nexusGroup
       code <<-EOH
          cd #{workDir}/nexus/plugin-repository &&
          unzip nexus-rundeck-plugin-#{rundeckPluginVersion}-bundle.zip &&

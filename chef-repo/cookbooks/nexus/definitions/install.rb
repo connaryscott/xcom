@@ -1,10 +1,24 @@
-define :install, :installRoot => nil, :pkgRepoUrl => nil, :pkgFilename => nil, :pkgChecksum => nil, :user => nil, :group => nil do
+define :install, :home => nil, :installRoot => nil, :pkgRepoUrl => nil, :pkgFilename => nil, :pkgChecksum => nil, :user => nil, :group => nil do
 
-         remote_file "#{Chef::Config[:file_cache_path]}/#{params[:pkgFilename]}" do
-            source "#{params[:pkgRepoUrl]}"
-            checksum "#{params[:pkgChecksum]}"
-            mode 0644
-         end
+   remote_file "#{Chef::Config[:file_cache_path]}/#{params[:pkgFilename]}" do
+         source "#{params[:pkgRepoUrl]}"
+         checksum "#{params[:pkgChecksum]}"
+         mode 0644
+   end
+
+   directory "#{params[:home]}" do
+      owner "#{params[:user]}"
+      group "#{params[:group]}"
+      mode "0755"
+      action :create
+   end
+
+   directory "#{params[:installRoot]}" do
+      owner "#{params[:user]}"
+      group "#{params[:group]}"
+      mode "0755"
+      action :create
+   end
 
    script "install" do
       interpreter "bash"
@@ -12,8 +26,7 @@ define :install, :installRoot => nil, :pkgRepoUrl => nil, :pkgFilename => nil, :
       group "#{params[:group]}"
       code <<-EOH
 
-         mkdir -p #{params[:installRoot]} &&
-         tar -C #{params[:installRoot]}/.. -zxf #{Chef::Config[:file_cache_path]}/#{params[:pkgFilename]}
+         tar -C #{params[:home]} -zxf #{Chef::Config[:file_cache_path]}/#{params[:pkgFilename]}
 
       EOH
       not_if do
@@ -22,4 +35,3 @@ define :install, :installRoot => nil, :pkgRepoUrl => nil, :pkgFilename => nil, :
    end
 
 end
-
