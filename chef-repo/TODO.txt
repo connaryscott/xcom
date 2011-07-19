@@ -1,0 +1,10 @@
+Currently for each recipe we do this:
+
+ knife node run_list add $(hostname -f) "recipe[nexus]"
+ knife node run_list add $(hostname -f) "recipe[jenkins]"
+
+which are not aggregated into a role yet... 
+
+we shall set that up next
+
+
