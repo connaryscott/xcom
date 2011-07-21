@@ -22,5 +22,5 @@ default[:nexus][:plugins][:rundeck][:version] = "1.2"
 #
 # horrific default, let's get some real nexus users going!
 #
-default[:nexus][:user] = "root"
-default[:nexus][:group] = "root"
+default[:nexus][:user] = "nexus"
+default[:nexus][:group] = "nexus"

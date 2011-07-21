@@ -7,9 +7,33 @@
 # All rights reserved - Do Not Redistribute
 #
 
+#
+# need info from command:  
+#    knife node show $(hostname -f) -l :
+#       kernel: 
+#          machine: (x86_64)
+#          name: (Linux)
+#
+
+# get capitalized kernel name and lowercase the first char
+KernelName = node[:kernel][:name]
+k = KernelName[0,1].downcase
+kernelName = k + KernelName[1,(KernelName.length-1)]
+
+
+
+
+# translate _ to -
+kernelMachine = node[:kernel][:machine]
+kernelMachineHy=kernelMachine.tr('_','-')
+
+
 packageUrl = node[:nexus][:package][:url]
 packageFilename = node[:nexus][:package][:filename]
 packageChecksum = node[:nexus][:package][:checksum]
+
+packageName = node[:nexus][:package][:name]
+packageVersion = node[:nexus][:package][:version]
 
 homeDir =  node[:nexus][:home]
 installRoot =  node[:nexus][:installRoot]
@@ -20,9 +44,12 @@ rundeckPluginVersion = node[:nexus][:plugins][:rundeck][:version]
 nexusUser = node[:nexus][:user]
 nexusGroup = node[:nexus][:group]
 
+
 install "nexus" do
   home homeDir
   installRoot installRoot 
+  os kernelName 
+  kernel kernelMachineHy
   pkgRepoUrl packageUrl
   pkgFilename packageFilename
   pkgChecksum packageChecksum
